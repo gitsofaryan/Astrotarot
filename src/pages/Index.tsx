@@ -173,7 +173,7 @@ const Index = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Moon className="w-8 h-8 text-accent animate-cosmic-float" />
             <h1 className="text-5xl md:text-6xl font-bold bg-gradient-mystical bg-clip-text text-transparent">
-              Mystic Oracle
+              AstroTarot
             </h1>
             <Star className="w-8 h-8 text-accent animate-cosmic-float" style={{ animationDelay: '1s' }} />
           </div>
