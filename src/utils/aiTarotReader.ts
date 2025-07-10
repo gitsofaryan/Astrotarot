@@ -1,13 +1,10 @@
 import { TarotCard } from '@/data/tarotDeck';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// Initialize Gemini AI
-const genAI = new GoogleGenerativeAI('AIzaSyAunvZeGoX4jnIBv5_PCGMzzR0z0AicyCQ');
+const GEMINI_API_KEY = 'AIzaSyAunvZeGoX4jnIBv5_PCGMzzR0z0AicyCQ';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
 export const generateTarotReading = async (question: string, cards: TarotCard[]): Promise<string> => {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-    
     const prompt = `You are a mystical tarot reader with deep knowledge of ancient wisdom and cosmic energies. 
 
 The seeker has asked: "${question}"
@@ -33,9 +30,37 @@ Please provide a mystical, insightful tarot reading that:
 
 Format the reading in flowing paragraphs that feel mystical and profound.`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    return response.text();
+    const response = await fetch(GEMINI_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-goog-api-key': GEMINI_API_KEY,
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              {
+                text: prompt
+              }
+            ]
+          }
+        ]
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    
+    // Extract the text from the Gemini response
+    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) {
+      return data.candidates[0].content.parts[0].text;
+    } else {
+      throw new Error('Unexpected response format from Gemini API');
+    }
     
   } catch (error) {
     console.error('Error generating Gemini reading:', error);
