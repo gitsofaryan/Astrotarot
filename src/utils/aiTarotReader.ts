@@ -1,46 +1,54 @@
 import { TarotCard } from '@/data/tarotDeck';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// Simulated AI interpretation for demo purposes
-// In a real app, this would call an AI service like Grok, OpenAI, etc.
+// Initialize Gemini AI
+const genAI = new GoogleGenerativeAI('AIzaSyAunvZeGoX4jnIBv5_PCGMzzR0z0AicyCQ');
+
 export const generateTarotReading = async (question: string, cards: TarotCard[]): Promise<string> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    
+    const prompt = `You are a mystical tarot reader with deep knowledge of ancient wisdom and cosmic energies. 
 
-  const readings = [
-    `The cosmic energies speak through these sacred cards, revealing profound insights into your query about "${question}".
+The seeker has asked: "${question}"
 
-The ${cards[0].name} in your past position illuminates the foundation of your current journey. ${cards[0].meaning.split(',')[0]} has been the driving force that brought you to this moment of seeking. The universe whispers that this energy has prepared you for what lies ahead.
+The three cards drawn are:
+1. Past Position - ${cards[0].name}: ${cards[0].meaning}
+   Keywords: ${cards[0].keywords.join(', ')}
+   
+2. Present Position - ${cards[1].name}: ${cards[1].meaning}
+   Keywords: ${cards[1].keywords.join(', ')}
+   
+3. Future Position - ${cards[2].name}: ${cards[2].meaning}
+   Keywords: ${cards[2].keywords.join(', ')}
 
-Your present moment, revealed by ${cards[1].name}, shows ${cards[1].meaning.split(',')[0].toLowerCase()} as your current spiritual state. This card encourages you to embrace ${cards[1].keywords[0]} and ${cards[1].keywords[1]}, for they are your allies in navigating the mystical currents of now.
+Please provide a mystical, insightful tarot reading that:
+- Connects the three cards in a meaningful narrative
+- Addresses the seeker's question directly
+- Uses mystical and cosmic language
+- Provides guidance and wisdom
+- Is approximately 200-300 words
+- Includes references to cosmic energies, ancient wisdom, and spiritual guidance
+- Ends with an uplifting and empowering message
 
-The future unfolds through ${cards[2].name}, promising ${cards[2].meaning.split(',')[0].toLowerCase()}. The stars align to bring ${cards[2].keywords[0]} into your path. Trust in the cosmic dance, for the universe conspires to manifest your highest good.
+Format the reading in flowing paragraphs that feel mystical and profound.`;
 
-May the wisdom of these ancient symbols guide your steps forward. ✨`,
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+    
+  } catch (error) {
+    console.error('Error generating Gemini reading:', error);
+    
+    // Fallback to a mystical error message
+    return `The cosmic energies are currently in flux, dear seeker. The ancient cards whisper that the universe is realigning to provide you with the perfect guidance at the perfect moment. 
 
-    `The ancient wisdom flows through these mystical cards, offering divine guidance for your question: "${question}".
+Your question about "${question}" has been heard by the celestial forces. The cards ${cards.map(c => c.name).join(', ')} hold profound wisdom for your journey.
 
-In the realm of what was, ${cards[0].name} emerges as your spiritual anchor. This powerful archetype speaks of ${cards[0].meaning.split(',')[0].toLowerCase()}, revealing how past experiences have woven the tapestry of your current reality. The card's essence of ${cards[0].keywords.slice(0, 2).join(' and ')} has been your hidden strength.
+In this moment of cosmic recalibration, trust that your path is guided by divine wisdom. The answers you seek are already within you, waiting to be unveiled when the stars align perfectly for your highest good.
 
-The present moment crystallizes through ${cards[1].name}, a card of profound significance. It mirrors your current soul's journey, emphasizing ${cards[1].meaning.split(',')[1]?.trim() || cards[1].meaning.split(',')[0]}. The universe calls you to embody ${cards[1].keywords[0]} as you stand at this crossroads of destiny.
-
-Your future path illuminates through ${cards[2].name}, herald of ${cards[2].meaning.split(',')[0].toLowerCase()}. This sacred symbol promises that ${cards[2].keywords.slice(0, 2).join(' and ')} will manifest in your journey ahead. The cosmic forces align to support your transformation.
-
-Trust the wisdom that flows through these ancient messengers. Your path is blessed. 🌟`,
-
-    `The sacred cards have chosen to speak, revealing the cosmic truth surrounding your inquiry: "${question}".
-
-${cards[0].name} emerges from the shadows of your past, carrying the essence of ${cards[0].meaning.split(',')[0].toLowerCase()}. This archetypal energy has been silently shaping your destiny, teaching you the sacred lessons of ${cards[0].keywords.slice(0, 2).join(' and ')}. Honor this foundation, for it is your spiritual bedrock.
-
-In the eternal now, ${cards[1].name} blazes forth with clarity. This card embodies ${cards[1].meaning.split(',')[0].toLowerCase()}, revealing your current spiritual frequency. The universe asks you to fully embrace ${cards[1].keywords[0]}, for it is through this energy that your highest potential awakens.
-
-The future realm beckons through ${cards[2].name}, bearer of ${cards[2].meaning.split(',')[0].toLowerCase()}. This mystical force promises to weave ${cards[2].keywords.slice(0, 2).join(' and ')} into the fabric of your tomorrow. The cosmic wheel turns in your favor.
-
-Remember, dear seeker, that you are both the question and the answer. These cards merely reflect the wisdom already dwelling within your soul. 🔮`
-  ];
-
-  // Return a random reading for variety
-  const randomIndex = Math.floor(Math.random() * readings.length);
-  return readings[randomIndex];
+Return to the oracle when the cosmic winds have settled, and the universe will speak through these sacred symbols with crystal clarity. ✨🔮`;
+  }
 };
 
 // Helper function to create mystical card interpretations
