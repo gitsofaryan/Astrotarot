@@ -1,23 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  Sparkles, 
-  Moon, 
-  Star, 
-  Eye, 
-  Zap, 
-  Heart, 
-  Globe, 
-  ArrowRight,
-  CheckCircle,
-  Telescope,
-  Compass,
-  Crystal
-} from 'lucide-react';
+import { Sparkles, Moon, Star, Eye, Zap, Heart, Globe, ArrowRight, CheckCircle, Telescope, Compass, Italic as Crystal } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import cosmicHero from '@/assets/cosmic-hero.jpg';
-import PricingSection from '@/components/PricingSection';
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -281,9 +267,6 @@ const Landing = () => {
             </div>
           </div>
         </section>
-
-        {/* Pricing Section */}
-        <PricingSection />
 
         {/* CTA Section */}
         <section className="container mx-auto px-4 py-20">
