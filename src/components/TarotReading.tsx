@@ -20,16 +20,16 @@ export const TarotReading = ({ cards, question, reading, isLoading }: TarotReadi
   return (
     <div className="space-y-8 animate-fade-in-up">
       {/* Question Display */}
-      <Card className="bg-gradient-card border-border/50">
-        <CardHeader>
-          <CardTitle className="text-center text-accent flex items-center justify-center gap-2">
-            <Sparkles className="w-5 h-5" />
-            Your Question
-            <Sparkles className="w-5 h-5" />
+      <Card className="bg-gradient-to-br from-card via-secondary/20 to-card border-2 border-dotted border-accent/40 shadow-2xl shadow-primary/20">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-center text-accent flex items-center justify-center gap-3 text-xl">
+            <Sparkles className="w-6 h-6 animate-cosmic-pulse" />
+            Your Sacred Question
+            <Sparkles className="w-6 h-6 animate-cosmic-pulse" />
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-center text-foreground italic text-lg">
+        <CardContent className="px-8 pb-6">
+          <p className="text-center text-foreground italic text-xl font-medium leading-relaxed">
             "{question}"
           </p>
         </CardContent>
@@ -42,15 +42,15 @@ export const TarotReading = ({ cards, question, reading, isLoading }: TarotReadi
           const IconComponent = position.icon;
           
           return (
-            <div key={card.id} className="text-center space-y-4">
+            <div key={card.id} className="text-center space-y-6">
               {/* Position Header */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-center gap-2 text-accent">
-                  <IconComponent className="w-5 h-5" />
-                  <h3 className="text-lg font-semibold">{position.name}</h3>
-                  <IconComponent className="w-5 h-5" />
+              <div className="space-y-3">
+                <div className="flex items-center justify-center gap-3 text-accent">
+                  <IconComponent className="w-6 h-6 animate-cosmic-pulse" />
+                  <h3 className="text-xl font-bold">{position.name}</h3>
+                  <IconComponent className="w-6 h-6 animate-cosmic-pulse" />
                 </div>
-                <p className="text-sm text-muted-foreground">{position.description}</p>
+                <p className="text-sm text-muted-foreground font-medium">{position.description}</p>
               </div>
 
               {/* Card */}
@@ -59,23 +59,23 @@ export const TarotReading = ({ cards, question, reading, isLoading }: TarotReadi
                   card={card} 
                   isRevealed={true} 
                   size="large"
-                  className="animate-cosmic-float"
-                  style={{ animationDelay: `${index * 0.2}s` }}
+                  className="animate-gentle-wave shadow-2xl shadow-primary/30"
+                  style={{ animationDelay: `${index * 0.3}s` }}
                 />
               </div>
 
               {/* Card Meaning */}
-              <Card className="bg-secondary/50 border-border/30">
-                <CardContent className="p-4">
-                  <h4 className="font-semibold text-accent mb-2">{card.name}</h4>
-                  <p className="text-sm text-foreground/90 leading-relaxed">
+              <Card className="bg-gradient-to-br from-secondary/30 via-card/50 to-secondary/30 border-2 border-dotted border-accent/30 shadow-xl shadow-primary/10">
+                <CardContent className="p-6">
+                  <h4 className="font-bold text-accent mb-3 text-lg">{card.name}</h4>
+                  <p className="text-sm text-foreground/90 leading-relaxed mb-4">
                     {card.meaning}
                   </p>
-                  <div className="flex flex-wrap gap-1 mt-3">
-                    {card.keywords.slice(0, 3).map(keyword => (
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {card.keywords.slice(0, 4).map(keyword => (
                       <span 
                         key={keyword}
-                        className="px-2 py-1 bg-accent/20 text-accent text-xs rounded-full"
+                        className="px-3 py-1.5 bg-accent/20 text-accent text-xs rounded-full font-medium border border-accent/30"
                       >
                         {keyword}
                       </span>
@@ -89,26 +89,31 @@ export const TarotReading = ({ cards, question, reading, isLoading }: TarotReadi
       </div>
 
       {/* AI Reading */}
-      <Card className="bg-gradient-to-br from-card via-secondary/30 to-card border-accent/30">
-        <CardHeader>
-          <CardTitle className="text-center text-accent flex items-center justify-center gap-2">
-            <Sparkles className="w-6 h-6 animate-cosmic-pulse" />
-            The Oracle's Interpretation
-            <Sparkles className="w-6 h-6 animate-cosmic-pulse" />
+      <Card className="bg-gradient-to-br from-card via-secondary/30 to-card border-2 border-dotted border-accent/40 shadow-2xl shadow-primary/20">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-center text-accent flex items-center justify-center gap-3 text-2xl">
+            <Sparkles className="w-8 h-8 animate-cosmic-pulse" />
+            The Oracle's Sacred Interpretation
+            <Sparkles className="w-8 h-8 animate-cosmic-pulse" />
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-8">
           {isLoading ? (
-            <div className="text-center space-y-4">
+            <div className="text-center space-y-6">
               <div className="animate-cosmic-pulse">
-                <Sparkles className="w-12 h-12 text-accent mx-auto mb-4" />
+                <Sparkles className="w-16 h-16 text-accent mx-auto mb-6" />
               </div>
-              <p className="text-muted-foreground">The cosmic energies are aligning...</p>
+              <p className="text-muted-foreground text-lg">The cosmic energies are aligning...</p>
               <p className="text-sm text-muted-foreground">Channeling the ancient wisdom...</p>
+              <div className="flex justify-center space-x-2 mt-4">
+                <div className="w-2 h-2 bg-accent rounded-full animate-bounce"></div>
+                <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+              </div>
             </div>
           ) : (
             <div className="prose prose-invert max-w-none">
-              <div className="text-foreground leading-relaxed whitespace-pre-line font-medium">
+              <div className="text-foreground leading-relaxed whitespace-pre-line font-medium text-lg">
                 {reading}
               </div>
             </div>

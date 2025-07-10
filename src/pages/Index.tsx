@@ -6,7 +6,8 @@ import { TarotCard } from '@/components/TarotCard';
 import { TarotReading } from '@/components/TarotReading';
 import { tarotDeck, drawCards, TarotCard as TarotCardType } from '@/data/tarotDeck';
 import { generateTarotReading } from '@/utils/aiTarotReader';
-import { Sparkles, Shuffle, Eye, Moon, Star } from 'lucide-react';
+import { tarotSounds } from '@/utils/sounds';
+import { Sparkles, Shuffle, Eye, Moon, Star, Volume2, VolumeX } from 'lucide-react';
 import cosmicHero from '@/assets/cosmic-hero.jpg';
 
 const Index = () => {
@@ -18,6 +19,7 @@ const Index = () => {
   const [shuffledDeck, setShuffledDeck] = useState<TarotCardType[]>([]);
   const [showDeck, setShowDeck] = useState(false);
   const [selectedCount, setSelectedCount] = useState(0);
+  const [soundEnabled, setSoundEnabled] = useState(true);
 
   const handleShuffleDeck = () => {
     if (!question.trim()) {
@@ -31,6 +33,9 @@ const Index = () => {
     setSelectedCount(0);
     setShowReading(false);
     setReading('');
+    
+    // Play shuffle sound
+    tarotSounds.playSound('shuffle');
   };
 
   const handleCardSelect = (card: TarotCardType) => {
@@ -39,8 +44,13 @@ const Index = () => {
       setSelectedCards(newSelected);
       setSelectedCount(newSelected.length);
 
+      // Play card select sound
+      tarotSounds.playSound('cardSelect');
+
       if (newSelected.length === 3) {
-        performReading(newSelected);
+        // Play mystical chime when all cards are selected
+        setTimeout(() => tarotSounds.playSound('mysticalChime'), 300);
+        setTimeout(() => performReading(newSelected), 500);
       }
     }
   };
@@ -49,9 +59,14 @@ const Index = () => {
     setIsLoading(true);
     setShowReading(true);
     
+    // Play card reveal sound
+    tarotSounds.playSound('cardReveal');
+    
     try {
       const aiReading = await generateTarotReading(question, cards);
       setReading(aiReading);
+      // Play completion sound when reading is done
+      tarotSounds.playSound('readingComplete');
     } catch (error) {
       console.error('Error generating reading:', error);
       setReading('The cosmic energies are currently misaligned. Please try again later.');
@@ -66,13 +81,21 @@ const Index = () => {
     setIsLoading(true);
     setShowDeck(false);
     
+    // Play shuffle sound
+    tarotSounds.playSound('shuffle');
+    
     const cards = drawCards(tarotDeck, 3);
     setSelectedCards(cards);
     setShowReading(true);
 
+    // Play card reveal sound after shuffle
+    setTimeout(() => tarotSounds.playSound('cardReveal'), 500);
+
     try {
       const aiReading = await generateTarotReading(question, cards);
       setReading(aiReading);
+      // Play completion sound
+      tarotSounds.playSound('readingComplete');
     } catch (error) {
       console.error('Error generating reading:', error);
       setReading('The cosmic energies are currently misaligned. Please try again later.');
@@ -88,6 +111,14 @@ const Index = () => {
     setShowReading(false);
     setShowDeck(false);
     setSelectedCount(0);
+    
+    // Play mystical chime for reset
+    tarotSounds.playSound('mysticalChime');
+  };
+
+  const toggleSound = () => {
+    const newState = tarotSounds.toggleSounds();
+    setSoundEnabled(newState);
   };
 
   return (
@@ -122,7 +153,23 @@ const Index = () => {
 
       <div className="relative z-10 container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-12 animate-fade-in-up">
+        <div className="text-center mb-12 animate-fade-in-up relative">
+          {/* Sound Toggle */}
+          <div className="absolute top-0 right-4">
+            <Button
+              onClick={toggleSound}
+              variant="ghost"
+              size="sm"
+              className="text-accent hover:bg-accent/20 transition-all duration-300"
+            >
+              {soundEnabled ? (
+                <Volume2 className="w-5 h-5" />
+              ) : (
+                <VolumeX className="w-5 h-5" />
+              )}
+            </Button>
+          </div>
+          
           <div className="flex items-center justify-center gap-3 mb-4">
             <Moon className="w-8 h-8 text-accent animate-cosmic-float" />
             <h1 className="text-5xl md:text-6xl font-bold bg-gradient-mystical bg-clip-text text-transparent">
@@ -139,30 +186,30 @@ const Index = () => {
         {!showReading ? (
           <div className="max-w-2xl mx-auto space-y-8">
             {/* Question Input */}
-            <Card className="bg-card/80 backdrop-blur-sm border-border/50 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-              <CardHeader>
-                <CardTitle className="text-center text-accent flex items-center justify-center gap-2">
-                  <Eye className="w-5 h-5" />
+            <Card className="bg-card/90 backdrop-blur-md border-2 border-dotted border-accent/50 shadow-2xl shadow-primary/20 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-center text-accent flex items-center justify-center gap-3 text-2xl">
+                  <Eye className="w-7 h-7 animate-cosmic-pulse" />
                   Speak Your Question to the Universe
-                  <Eye className="w-5 h-5" />
+                  <Eye className="w-7 h-7 animate-cosmic-pulse" />
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-8 p-8">
                 <Input
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                   placeholder="What guidance do you seek from the cosmic energies?"
-                  className="text-lg p-4 bg-background/50 border-accent/30 focus:border-accent text-center"
+                  className="text-lg p-6 bg-background/60 border-2 border-accent/40 focus:border-accent text-center rounded-xl font-medium placeholder:text-muted-foreground/70"
                 />
                 
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col sm:flex-row gap-6">
                   <Button
                     onClick={handleQuickReading}
                     disabled={!question.trim() || isLoading}
-                    className="flex-1 bg-gradient-mystical hover:shadow-[var(--glow-mystical)] transition-all duration-300"
+                    className="flex-1 bg-gradient-mystical hover:shadow-2xl hover:shadow-accent/30 transition-all duration-500 h-14 text-lg font-semibold"
                     size="lg"
                   >
-                    <Sparkles className="w-5 h-5 mr-2" />
+                    <Sparkles className="w-6 h-6 mr-3" />
                     Quick Reading
                   </Button>
                   
@@ -170,10 +217,10 @@ const Index = () => {
                     onClick={handleShuffleDeck}
                     disabled={!question.trim()}
                     variant="outline"
-                    className="flex-1 border-accent/50 hover:bg-accent/10 hover:border-accent"
+                    className="flex-1 border-2 border-accent/60 hover:bg-accent/20 hover:border-accent hover:shadow-xl hover:shadow-accent/20 transition-all duration-500 h-14 text-lg font-semibold"
                     size="lg"
                   >
-                    <Shuffle className="w-5 h-5 mr-2" />
+                    <Shuffle className="w-6 h-6 mr-3" />
                     Choose Your Cards
                   </Button>
                 </div>
@@ -182,17 +229,17 @@ const Index = () => {
 
             {/* Deck Selection */}
             {showDeck && (
-              <Card className="bg-card/80 backdrop-blur-sm border-border/50 animate-fade-in-up">
-                <CardHeader>
-                  <CardTitle className="text-center text-accent">
+              <Card className="bg-card/90 backdrop-blur-md border-2 border-dotted border-accent/50 shadow-2xl shadow-primary/20 animate-fade-in-up">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-center text-accent text-xl">
                     Select 3 Cards ({selectedCount}/3)
                   </CardTitle>
-                  <p className="text-center text-muted-foreground">
-                    Trust your intuition and choose the cards that call to you
+                  <p className="text-center text-muted-foreground font-medium">
+                    Trust your intuition and choose the cards that call to your soul
                   </p>
                 </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 max-h-96 overflow-y-auto">
+                <CardContent className="p-6">
+                  <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3 max-h-96 overflow-y-auto p-2">
                     {shuffledDeck.slice(0, 20).map((card, index) => (
                       <TarotCard
                         key={`${card.id}-${index}`}
@@ -201,7 +248,7 @@ const Index = () => {
                         isSelected={selectedCards.some(c => c.id === card.id)}
                         onClick={() => handleCardSelect(card)}
                         size="small"
-                        className="hover:scale-110 transition-transform duration-300"
+                        className="hover:scale-110 transition-all duration-500 hover:shadow-xl hover:shadow-accent/30"
                       />
                     ))}
                   </div>
@@ -222,10 +269,10 @@ const Index = () => {
               <Button
                 onClick={resetReading}
                 variant="outline"
-                className="border-accent/50 hover:bg-accent/10 hover:border-accent"
+                className="border-2 border-accent/60 hover:bg-accent/20 hover:border-accent hover:shadow-xl hover:shadow-accent/20 transition-all duration-500 h-12 text-lg font-semibold px-8"
                 size="lg"
               >
-                <Sparkles className="w-5 h-5 mr-2" />
+                <Sparkles className="w-6 h-6 mr-3" />
                 New Reading
               </Button>
             </div>

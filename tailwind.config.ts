@@ -79,20 +79,29 @@ export default {
 				},
 				'cosmic-float': {
 					'0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
-					'50%': { transform: 'translateY(-20px) rotate(180deg)' }
+					'50%': { transform: 'translateY(-10px) rotate(2deg)' }
+				},
+				'gentle-wave': {
+					'0%, 100%': { transform: 'translateY(0px) rotateZ(0deg) scale(1)' },
+					'25%': { transform: 'translateY(-8px) rotateZ(1deg) scale(1.02)' },
+					'50%': { transform: 'translateY(-4px) rotateZ(-1deg) scale(1.01)' },
+					'75%': { transform: 'translateY(-12px) rotateZ(0.5deg) scale(1.02)' }
+				},
+				'gentle-float': {
+					'0%, 100%': { transform: 'translateY(0px) rotateZ(0deg)' },
+					'50%': { transform: 'translateY(-6px) rotateZ(1deg)' }
 				},
 				'mystical-glow': {
-					'0%, 100%': { boxShadow: '0 0 30px hsl(270 91% 65% / 0.4)' },
-					'50%': { boxShadow: '0 0 20px hsl(45 93% 47% / 0.6)' }
-				},
-				'card-flip': {
-					'0%': { transform: 'rotateY(0deg)' },
-					'50%': { transform: 'rotateY(90deg)' },
-					'100%': { transform: 'rotateY(0deg)' }
+					'0%, 100%': { boxShadow: '0 0 20px hsl(270 91% 65% / 0.3)' },
+					'50%': { boxShadow: '0 0 40px hsl(45 93% 47% / 0.4)' }
 				},
 				'cosmic-pulse': {
-					'0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
-					'50%': { opacity: '1', transform: 'scale(1.05)' }
+					'0%, 100%': { opacity: '0.7', transform: 'scale(1)' },
+					'50%': { opacity: '1', transform: 'scale(1.1)' }
+				},
+				'shimmer': {
+					'0%': { backgroundPosition: '-200% 0' },
+					'100%': { backgroundPosition: '200% 0' }
 				},
 				'fade-in-up': {
 					'0%': { opacity: '0', transform: 'translateY(20px)' },
@@ -102,11 +111,13 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'cosmic-float': 'cosmic-float 6s ease-in-out infinite',
-				'mystical-glow': 'mystical-glow 3s ease-in-out infinite',
-				'card-flip': 'card-flip 0.8s ease-in-out',
-				'cosmic-pulse': 'cosmic-pulse 2s ease-in-out infinite',
-				'fade-in-up': 'fade-in-up 0.6s ease-out'
+				'cosmic-float': 'cosmic-float 4s ease-in-out infinite',
+				'gentle-wave': 'gentle-wave 3s ease-in-out infinite',
+				'gentle-float': 'gentle-float 2s ease-in-out infinite',
+				'mystical-glow': 'mystical-glow 2s ease-in-out infinite',
+				'cosmic-pulse': 'cosmic-pulse 1.5s ease-in-out infinite',
+				'shimmer': 'shimmer 2s linear infinite',
+				'fade-in-up': 'fade-in-up 0.8s ease-out'
 			},
 			backgroundImage: {
 				'gradient-cosmic': 'var(--gradient-cosmic)',
