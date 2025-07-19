@@ -112,19 +112,42 @@ export const TarotReading = ({ cards, question, reading, isLoading }: TarotReadi
               </div>
             </div>
           ) : (
-            <div className="space-y-6">
-              {reading.split('\n\n').map((paragraph, index) => (
+            <div className="space-y-8">
+              {reading.split('\n\n').filter(paragraph => paragraph.trim()).map((paragraph, index) => (
                 <div 
-                  key={index} 
-                  className="text-foreground leading-8 text-lg font-medium tracking-wide"
-                  style={{ 
-                    textIndent: index > 0 ? '2rem' : '0',
-                    marginBottom: index < reading.split('\n\n').length - 1 ? '1.5rem' : '0'
-                  }}
+                  key={index}
+                  className="relative group"
+                  style={{ animationDelay: `${index * 0.3}s` }}
                 >
-                  {paragraph.trim()}
+                  {/* Golden Border Block */}
+                  <div className="relative p-8 rounded-2xl bg-gradient-to-br from-accent/10 via-background/80 to-accent/5 border-2 border-accent/30 shadow-2xl shadow-accent/20 overflow-hidden animate-text-reveal">
+                    {/* Shimmer Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/20 to-transparent animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    
+                    {/* Content */}
+                    <div className="relative z-10">
+                      <p className="text-foreground leading-8 text-lg font-medium tracking-wide animate-golden-glow">
+                        {paragraph.trim()}
+                      </p>
+                    </div>
+
+                    {/* Corner Decorations */}
+                    <div className="absolute top-3 left-3 w-6 h-6 border-l-2 border-t-2 border-accent/50 rounded-tl-lg" />
+                    <div className="absolute top-3 right-3 w-6 h-6 border-r-2 border-t-2 border-accent/50 rounded-tr-lg" />
+                    <div className="absolute bottom-3 left-3 w-6 h-6 border-l-2 border-b-2 border-accent/50 rounded-bl-lg" />
+                    <div className="absolute bottom-3 right-3 w-6 h-6 border-r-2 border-b-2 border-accent/50 rounded-br-lg" />
+                  </div>
                 </div>
               ))}
+              
+              {/* Mystical Conclusion */}
+              <div className="text-center mt-12 space-y-4">
+                <div className="w-32 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto animate-golden-glow" />
+                <p className="text-accent text-lg font-semibold animate-cosmic-pulse italic">
+                  ✨ The universe has spoken ✨
+                </p>
+                <div className="w-32 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto animate-golden-glow" />
+              </div>
             </div>
           )}
         </CardContent>

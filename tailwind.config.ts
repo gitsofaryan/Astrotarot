@@ -103,6 +103,14 @@ export default {
 					'0%': { backgroundPosition: '-200% 0' },
 					'100%': { backgroundPosition: '200% 0' }
 				},
+				'golden-glow': {
+					'0%, 100%': { textShadow: '0 0 10px hsl(45 93% 47% / 0.5)' },
+					'50%': { textShadow: '0 0 20px hsl(45 93% 47% / 0.8), 0 0 30px hsl(45 93% 47% / 0.3)' }
+				},
+				'text-reveal': {
+					'0%': { opacity: '0', transform: 'translateY(20px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
 				'fade-in-up': {
 					'0%': { opacity: '0', transform: 'translateY(20px)' },
 					'100%': { opacity: '1', transform: 'translateY(0)' }
@@ -117,6 +125,8 @@ export default {
 				'mystical-glow': 'mystical-glow 2s ease-in-out infinite',
 				'cosmic-pulse': 'cosmic-pulse 1.5s ease-in-out infinite',
 				'shimmer': 'shimmer 2s linear infinite',
+				'golden-glow': 'golden-glow 2s ease-in-out infinite',
+				'text-reveal': 'text-reveal 0.8s ease-out forwards',
 				'fade-in-up': 'fade-in-up 0.8s ease-out'
 			},
 			backgroundImage: {

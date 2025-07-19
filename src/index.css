@@ -150,6 +150,21 @@ All colors MUST be HSL.
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
   }
+
+  @keyframes golden-glow {
+    0%, 100% { text-shadow: 0 0 10px hsl(45 93% 47% / 0.5); }
+    50% { text-shadow: 0 0 20px hsl(45 93% 47% / 0.8), 0 0 30px hsl(45 93% 47% / 0.3); }
+  }
+
+  @keyframes typewriter {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+
+  @keyframes text-reveal {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
 }
 
 @layer base {
