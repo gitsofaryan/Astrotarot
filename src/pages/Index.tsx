@@ -8,6 +8,7 @@ import { tarotDeck, drawCards, TarotCard as TarotCardType } from '@/data/tarotDe
 import { generateTarotReading } from '@/utils/aiTarotReader';
 import { tarotSounds } from '@/utils/sounds';
 import { Sparkles, Shuffle, Eye, Moon, Star, Volume2, VolumeX } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import cosmicHero from '@/assets/cosmic-hero.jpg';
 
 const Index = () => {
@@ -154,8 +155,9 @@ const Index = () => {
       <div className="relative z-10 container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12 animate-fade-in-up relative">
-          {/* Sound Toggle */}
-          <div className="absolute top-0 right-4">
+          {/* Controls */}
+          <div className="absolute top-0 right-4 flex gap-2">
+            <ThemeToggle />
             <Button
               onClick={toggleSound}
               variant="ghost"

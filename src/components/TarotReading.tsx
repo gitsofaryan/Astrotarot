@@ -112,10 +112,19 @@ export const TarotReading = ({ cards, question, reading, isLoading }: TarotReadi
               </div>
             </div>
           ) : (
-            <div className="prose prose-invert max-w-none">
-              <div className="text-foreground leading-relaxed whitespace-pre-line font-medium text-lg">
-                {reading}
-              </div>
+            <div className="space-y-6">
+              {reading.split('\n\n').map((paragraph, index) => (
+                <div 
+                  key={index} 
+                  className="text-foreground leading-8 text-lg font-medium tracking-wide"
+                  style={{ 
+                    textIndent: index > 0 ? '2rem' : '0',
+                    marginBottom: index < reading.split('\n\n').length - 1 ? '1.5rem' : '0'
+                  }}
+                >
+                  {paragraph.trim()}
+                </div>
+              ))}
             </div>
           )}
         </CardContent>
