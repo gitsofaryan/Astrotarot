@@ -90,12 +90,18 @@ export const TarotReading = ({ cards, question, reading, isLoading }: TarotReadi
 
       {/* AI Reading */}
       <Card className="bg-gradient-to-br from-card via-secondary/30 to-card border-2 border-dotted border-accent/40 shadow-2xl shadow-primary/20">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-center text-accent flex items-center justify-center gap-3 text-2xl">
-            <Sparkles className="w-8 h-8 animate-cosmic-pulse" />
+        <CardHeader className="pb-6">
+          <CardTitle className="text-center text-accent flex items-center justify-center gap-4 text-3xl mb-4">
+            <Sparkles className="w-10 h-10 animate-cosmic-pulse" />
             The Oracle's Sacred Interpretation
-            <Sparkles className="w-8 h-8 animate-cosmic-pulse" />
+            <Sparkles className="w-10 h-10 animate-cosmic-pulse" />
           </CardTitle>
+          <div className="text-center">
+            <h3 className="text-2xl font-bold italic text-accent/90 animate-golden-glow">
+              Your Mystical Reading
+            </h3>
+            <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto mt-3 animate-shimmer" />
+          </div>
         </CardHeader>
         <CardContent className="p-8">
           {isLoading ? (
@@ -112,41 +118,41 @@ export const TarotReading = ({ cards, question, reading, isLoading }: TarotReadi
               </div>
             </div>
           ) : (
-            <div className="space-y-8">
+            <div className="space-y-6">
               {reading.split('\n\n').filter(paragraph => paragraph.trim()).map((paragraph, index) => (
                 <div 
                   key={index}
                   className="relative group"
-                  style={{ animationDelay: `${index * 0.3}s` }}
+                  style={{ animationDelay: `${index * 0.2}s` }}
                 >
                   {/* Golden Border Block */}
-                  <div className="relative p-8 rounded-2xl bg-gradient-to-br from-accent/10 via-background/80 to-accent/5 border-2 border-accent/30 shadow-2xl shadow-accent/20 overflow-hidden animate-text-reveal">
+                  <div className="relative p-6 rounded-xl bg-gradient-to-br from-accent/8 via-background/90 to-accent/5 border border-accent/25 shadow-xl shadow-accent/10 overflow-hidden animate-text-reveal">
                     {/* Shimmer Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/20 to-transparent animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/15 to-transparent animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     
                     {/* Content */}
                     <div className="relative z-10">
-                      <p className="text-foreground leading-8 text-lg font-medium tracking-wide animate-golden-glow">
-                        {paragraph.trim()}
+                      <p className="text-foreground/95 leading-7 text-base font-normal italic tracking-wide">
+                        {paragraph.trim().replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1').replace(/__(.*?)__/g, '$1').replace(/_(.*?)_/g, '$1')}
                       </p>
                     </div>
 
-                    {/* Corner Decorations */}
-                    <div className="absolute top-3 left-3 w-6 h-6 border-l-2 border-t-2 border-accent/50 rounded-tl-lg" />
-                    <div className="absolute top-3 right-3 w-6 h-6 border-r-2 border-t-2 border-accent/50 rounded-tr-lg" />
-                    <div className="absolute bottom-3 left-3 w-6 h-6 border-l-2 border-b-2 border-accent/50 rounded-bl-lg" />
-                    <div className="absolute bottom-3 right-3 w-6 h-6 border-r-2 border-b-2 border-accent/50 rounded-br-lg" />
+                    {/* Subtle Corner Accents */}
+                    <div className="absolute top-2 left-2 w-3 h-3 border-l border-t border-accent/40 rounded-tl" />
+                    <div className="absolute top-2 right-2 w-3 h-3 border-r border-t border-accent/40 rounded-tr" />
+                    <div className="absolute bottom-2 left-2 w-3 h-3 border-l border-b border-accent/40 rounded-bl" />
+                    <div className="absolute bottom-2 right-2 w-3 h-3 border-r border-b border-accent/40 rounded-br" />
                   </div>
                 </div>
               ))}
               
               {/* Mystical Conclusion */}
-              <div className="text-center mt-12 space-y-4">
-                <div className="w-32 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto animate-golden-glow" />
+              <div className="text-center mt-10 space-y-3">
+                <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto animate-golden-glow" />
                 <p className="text-accent text-lg font-semibold animate-cosmic-pulse italic">
                   ✨ The universe has spoken ✨
                 </p>
-                <div className="w-32 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto animate-golden-glow" />
+                <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto animate-golden-glow" />
               </div>
             </div>
           )}
