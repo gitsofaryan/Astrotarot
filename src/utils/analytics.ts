@@ -1,5 +1,5 @@
 // Safe analytics tracking using @vercel/analytics
-import { track } from '@vercel/analytics';
+import { track } from "@vercel/analytics";
 
 // Safe track function that handles errors gracefully
 const safeTrack = (
