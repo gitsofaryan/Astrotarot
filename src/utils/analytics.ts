@@ -1,36 +1,22 @@
-// Safe analytics tracking that works with script-based Vercel Analytics
+// Safe analytics tracking using @vercel/analytics
+import { track } from '@vercel/analytics';
 
-// Extend window object to include Vercel Analytics
-declare global {
-  interface Window {
-    va?: {
-      track: (event: string, properties?: Record<string, unknown>) => void;
-    };
-  }
-}
-
-// Safe track function that uses window.va from injected script
+// Safe track function that handles errors gracefully
 const safeTrack = (
   eventName: string,
   properties?: Record<string, string | number | boolean | null>
 ) => {
   try {
-    // Use Vercel Analytics if available (from injected script)
-    if (window.va?.track) {
-      if (properties) {
-        window.va.track(eventName, properties);
-      } else {
-        window.va.track(eventName);
-      }
-      return;
+    if (properties) {
+      track(eventName, properties);
+    } else {
+      track(eventName);
     }
-
+  } catch (error) {
     // Fallback: log to console in development
     if (import.meta.env.DEV) {
       console.log("Analytics track:", eventName, properties);
     }
-  } catch (error) {
-    console.warn("Analytics tracking failed:", error);
   }
 };
 
