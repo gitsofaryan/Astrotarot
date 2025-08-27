@@ -1,37 +1,38 @@
-// Safe analytics tracking that works in all environments
-let trackFunction: typeof import("@vercel/analytics").track | null = null;
+// Safe analytics tracking that works with script-based Vercel Analytics
 
-// Dynamically import the track function to avoid build issues
-const initializeTracking = async () => {
-  if (
-    !trackFunction &&
-    (import.meta.env.PROD || import.meta.env.VITE_ENABLE_ANALYTICS === "true")
-  ) {
-    try {
-      const analytics = await import("@vercel/analytics");
-      trackFunction = analytics.track;
-    } catch (error) {
-      console.warn("Failed to load analytics:", error);
-    }
+// Extend window object to include Vercel Analytics
+declare global {
+  interface Window {
+    va?: {
+      track: (event: string, properties?: Record<string, unknown>) => void;
+    };
   }
-};
+}
 
-// Safe track function that handles missing dependencies
+// Safe track function that uses window.va from injected script
 const safeTrack = (
   eventName: string,
   properties?: Record<string, string | number | boolean | null>
 ) => {
-  if (trackFunction && properties) {
-    trackFunction(eventName, properties);
-  } else if (trackFunction) {
-    trackFunction(eventName);
-  } else if (import.meta.env.DEV) {
-    console.log("Analytics track:", eventName, properties);
+  try {
+    // Use Vercel Analytics if available (from injected script)
+    if (window.va?.track) {
+      if (properties) {
+        window.va.track(eventName, properties);
+      } else {
+        window.va.track(eventName);
+      }
+      return;
+    }
+
+    // Fallback: log to console in development
+    if (import.meta.env.DEV) {
+      console.log("Analytics track:", eventName, properties);
+    }
+  } catch (error) {
+    console.warn("Analytics tracking failed:", error);
   }
 };
-
-// Initialize tracking on first import
-initializeTracking();
 
 // Custom event tracking for AstroTarot
 export const trackEvent = {
