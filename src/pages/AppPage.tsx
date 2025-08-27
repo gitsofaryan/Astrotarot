@@ -12,18 +12,21 @@ import { generateTarotReading } from '@/utils/aiTarotReader';
 import { tarotSounds } from '@/utils/sounds';
 import { useAuth } from '@/contexts/AuthContext';
 import { getPlanByTier } from '@/data/subscriptionPlans';
-import { 
-  Sparkles, 
-  Shuffle, 
-  Eye, 
-  Moon, 
-  Star, 
-  Volume2, 
+import {
+  Sparkles,
+  Shuffle,
+  Eye,
+  Moon,
+  Star,
+  Volume2,
   VolumeX,
   Crown,
   Home,
   User,
-  AlertTriangle
+  AlertTriangle,
+  Github,
+  ExternalLink,
+  Share2
 } from 'lucide-react';
 import { toast } from 'sonner';
 import cosmicHero from '@/assets/cosmic-hero.jpg';
@@ -43,8 +46,8 @@ const AppPage = () => {
 
   const currentPlan = getPlanByTier(user?.subscription || 'free');
   const canUseReading = user && (user.readingsLimit === -1 || user.readingsUsed < user.readingsLimit);
-  const usagePercentage = user && user.readingsLimit !== -1 
-    ? (user.readingsUsed / user.readingsLimit) * 100 
+  const usagePercentage = user && user.readingsLimit !== -1
+    ? (user.readingsUsed / user.readingsLimit) * 100
     : 0;
 
   const handleShuffleDeck = () => {
@@ -65,7 +68,7 @@ const AppPage = () => {
     setSelectedCount(0);
     setShowReading(false);
     setReading('');
-    
+
     tarotSounds.playSound('shuffle');
   };
 
@@ -92,18 +95,18 @@ const AppPage = () => {
 
     setIsLoading(true);
     setShowReading(true);
-    
+
     tarotSounds.playSound('cardReveal');
-    
+
     try {
       const aiReading = await generateTarotReading(question, cards);
       setReading(aiReading);
-      
+
       // Update user's reading count
       updateUser({
         readingsUsed: user.readingsUsed + 1
       });
-      
+
       tarotSounds.playSound('readingComplete');
       toast.success('Your cosmic reading is complete!');
     } catch (error) {
@@ -128,9 +131,9 @@ const AppPage = () => {
 
     setIsLoading(true);
     setShowDeck(false);
-    
+
     tarotSounds.playSound('shuffle');
-    
+
     const cards = drawCards(tarotDeck, 3);
     setSelectedCards(cards);
     setShowReading(true);
@@ -140,14 +143,14 @@ const AppPage = () => {
     try {
       const aiReading = await generateTarotReading(question, cards);
       setReading(aiReading);
-      
+
       // Update user's reading count
       if (user) {
         updateUser({
           readingsUsed: user.readingsUsed + 1
         });
       }
-      
+
       tarotSounds.playSound('readingComplete');
       toast.success('Your cosmic reading is complete!');
     } catch (error) {
@@ -166,7 +169,7 @@ const AppPage = () => {
     setShowReading(false);
     setShowDeck(false);
     setSelectedCount(0);
-    
+
     tarotSounds.playSound('mysticalChime');
   };
 
@@ -179,9 +182,9 @@ const AppPage = () => {
     <div className="min-h-screen bg-gradient-cosmic relative overflow-hidden">
       {/* Cosmic Background */}
       <div className="absolute inset-0">
-        <img 
-          src={cosmicHero} 
-          alt="Cosmic background" 
+        <img
+          src={cosmicHero}
+          alt="Cosmic background"
           className="w-full h-full object-cover opacity-30"
         />
         <div className="absolute inset-0 bg-gradient-cosmic/80" />
@@ -196,7 +199,7 @@ const AppPage = () => {
               AstroTarot
             </span>
           </div>
-          
+
           <div className="flex items-center gap-4">
             {/* Usage Indicator */}
             {user && user.readingsLimit !== -1 && (
@@ -205,13 +208,54 @@ const AppPage = () => {
                   {user.readingsUsed}/{user.readingsLimit} readings
                 </span>
                 <div className="w-20 h-2 bg-secondary rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full bg-gradient-mystical transition-all duration-300"
                     style={{ width: `${Math.min(usagePercentage, 100)}%` }}
                   />
                 </div>
               </div>
             )}
+
+            <div className="flex items-center gap-2">
+              <a
+                href="https://github.com/gitsofaryan/astrotarot"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors text-xs bg-accent/10 hover:bg-accent/20 px-2 py-1 rounded"
+                title="Give us a star on GitHub"
+              >
+                <Star className="w-3 h-3" />
+                <ExternalLink className="w-3 h-3" />
+              </a>
+              <button
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'AstroTarot - AI Powered Tarot Readings',
+                      text: 'Discover your cosmic destiny with AI-powered tarot readings!',
+                      url: window.location.href
+                    });
+                  } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    alert('Link copied to clipboard!');
+                  }
+                }}
+                className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors text-xs bg-accent/10 hover:bg-accent/20 px-2 py-1 rounded"
+                title="Share with friends"
+              >
+                <Share2 className="w-3 h-3" />
+              </button>
+            </div>
+
+            <a
+              href="https://github.com/gitsofaryan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors text-sm"
+            >
+              <Github className="w-4 h-4" />
+              <span className="hidden lg:inline">Arien Jain</span>
+            </a>
 
             <Button
               onClick={toggleSound}
@@ -265,7 +309,7 @@ const AppPage = () => {
                     You've used all {user.readingsLimit} readings for this month. Upgrade to continue your cosmic journey.
                   </p>
                 </div>
-                <Button 
+                <Button
                   onClick={() => setShowSubscriptionModal(true)}
                   className="ml-auto bg-gradient-mystical hover:shadow-lg hover:shadow-accent/30"
                 >
@@ -286,7 +330,7 @@ const AppPage = () => {
             </h1>
             <Star className="w-8 h-8 text-accent animate-cosmic-float" style={{ animationDelay: '1s' }} />
           </div>
-          
+
           {user && (
             <div className="flex items-center justify-center gap-4 mb-4">
               <Badge className="bg-accent/20 text-accent">
@@ -303,7 +347,7 @@ const AppPage = () => {
               )}
             </div>
           )}
-          
+
           <p className="text-xl text-foreground/80 max-w-2xl mx-auto leading-relaxed">
             Ask your question and let the cosmic energies guide your path through the ancient wisdom of the Tarot.
           </p>
@@ -327,7 +371,7 @@ const AppPage = () => {
                   placeholder="What guidance do you seek from the cosmic energies?"
                   className="text-lg p-6 bg-background/60 border-2 border-accent/40 focus:border-accent text-center rounded-xl font-medium placeholder:text-muted-foreground/70"
                 />
-                
+
                 <div className="flex flex-col sm:flex-row gap-6">
                   <Button
                     onClick={handleQuickReading}
@@ -338,7 +382,7 @@ const AppPage = () => {
                     <Sparkles className="w-6 h-6 mr-3" />
                     Quick Reading
                   </Button>
-                  
+
                   <Button
                     onClick={handleShuffleDeck}
                     disabled={!question.trim() || !canUseReading}
@@ -406,7 +450,7 @@ const AppPage = () => {
         )}
       </div>
 
-      <SubscriptionModal 
+      <SubscriptionModal
         isOpen={showSubscriptionModal}
         onClose={() => setShowSubscriptionModal(false)}
         currentPlan={user?.subscription}

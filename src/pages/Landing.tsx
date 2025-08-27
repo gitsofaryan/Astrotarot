@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Sparkles, Moon, Star, Eye, Zap, Heart, Globe, ArrowRight, CheckCircle, Telescope, Compass, Italic as Crystal } from 'lucide-react';
+import { Sparkles, Moon, Star, Eye, Zap, Heart, Globe, ArrowRight, CheckCircle, Telescope, Compass, Italic as Crystal, Github, ExternalLink, Share2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import cosmicHero from '@/assets/cosmic-hero.jpg';
 
@@ -84,15 +84,15 @@ const Landing = () => {
       setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [testimonials.length]);
 
   return (
     <div className="min-h-screen bg-gradient-cosmic relative overflow-hidden">
       {/* Cosmic Background */}
       <div className="absolute inset-0">
-        <img 
-          src={cosmicHero} 
-          alt="Cosmic background" 
+        <img
+          src={cosmicHero}
+          alt="Cosmic background"
           className="w-full h-full object-cover opacity-20"
         />
         <div className="absolute inset-0 bg-gradient-cosmic/90" />
@@ -127,14 +127,14 @@ const Landing = () => {
               </h1>
               <Star className="w-12 h-12 text-accent animate-cosmic-float" style={{ animationDelay: '1s' }} />
             </div>
-            
+
             <p className="text-2xl md:text-3xl text-foreground/90 mb-8 leading-relaxed">
               Unlock the Mysteries of Your Destiny
             </p>
-            
+
             <p className="text-xl text-foreground/80 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Experience the perfect fusion of ancient tarot wisdom and cutting-edge AI technology. 
-              Discover your cosmic blueprint, navigate life's challenges, and manifest your highest potential 
+              Experience the perfect fusion of ancient tarot wisdom and cutting-edge AI technology.
+              Discover your cosmic blueprint, navigate life's challenges, and manifest your highest potential
               through personalized readings powered by celestial intelligence.
             </p>
 
@@ -148,7 +148,7 @@ const Landing = () => {
                 Start Your Cosmic Journey
                 <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
               </Button>
-              
+
               <Button
                 onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
                 variant="outline"
@@ -175,7 +175,7 @@ const Landing = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <Card 
+              <Card
                 key={index}
                 className="bg-card/90 backdrop-blur-md border-2 border-dotted border-accent/40 hover:border-accent/80 shadow-2xl shadow-primary/20 hover:shadow-accent/30 transition-all duration-500 hover:scale-105 animate-fade-in-up group"
                 style={{ animationDelay: `${index * 0.1}s` }}
@@ -207,7 +207,7 @@ const Landing = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {cosmicFacts.map((fact, index) => (
-              <Card 
+              <Card
                 key={index}
                 className="bg-card/90 backdrop-blur-md border-2 border-dotted border-accent/40 shadow-2xl shadow-primary/20 hover:shadow-accent/30 transition-all duration-500 animate-fade-in-up"
                 style={{ animationDelay: `${index * 0.2}s` }}
@@ -259,9 +259,8 @@ const Landing = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentTestimonial(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentTestimonial ? 'bg-accent' : 'bg-accent/30'
-                  }`}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentTestimonial ? 'bg-accent' : 'bg-accent/30'
+                    }`}
                 />
               ))}
             </div>
@@ -276,10 +275,10 @@ const Landing = () => {
                 Your Cosmic Destiny Awaits
               </h2>
               <p className="text-xl text-foreground/90 mb-8 leading-relaxed">
-                Step into the realm of infinite possibilities. Let the ancient wisdom of the cosmos 
+                Step into the realm of infinite possibilities. Let the ancient wisdom of the cosmos
                 illuminate your path and reveal the secrets written in the stars.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
                 <Button
                   onClick={() => navigate('/reading')}
@@ -319,9 +318,53 @@ const Landing = () => {
             </span>
             <Star className="w-6 h-6 text-accent" />
           </div>
-          <p className="text-foreground/60">
-            © 2024 AstroTarot. Connecting souls with cosmic wisdom since the dawn of digital mysticism.
+          <p className="text-foreground/60 mb-3">
+            © 2025 AstroTarot. Connecting souls with cosmic wisdom since the dawn of digital mysticism.
           </p>
+          <div className="flex items-center justify-center gap-6 text-sm">
+            <div className="flex items-center gap-2 text-foreground/50">
+              <span>Developed by</span>
+              <a
+                href="https://github.com/gitsofaryan"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors"
+              >
+                <Github className="w-4 h-4" />
+                Arien Jain
+              </a>
+            </div>
+            <div className="flex items-center gap-4">
+              <a
+                href="https://github.com/gitsofaryan/astrotarot"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors bg-accent/10 hover:bg-accent/20 px-3 py-1 rounded-lg"
+              >
+                <Star className="w-4 h-4" />
+                <span>Give a Star</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+              <button
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'AstroTarot - AI Powered Tarot Readings',
+                      text: 'Discover your cosmic destiny with AI-powered tarot readings!',
+                      url: window.location.href
+                    });
+                  } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    alert('Link copied to clipboard!');
+                  }
+                }}
+                className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors bg-accent/10 hover:bg-accent/20 px-3 py-1 rounded-lg"
+              >
+                <Share2 className="w-4 h-4" />
+                <span>Share with Friends</span>
+              </button>
+            </div>
+          </div>
         </footer>
       </div>
     </div>

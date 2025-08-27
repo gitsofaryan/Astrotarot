@@ -7,7 +7,7 @@ import { TarotReading } from '@/components/TarotReading';
 import { tarotDeck, drawCards, TarotCard as TarotCardType } from '@/data/tarotDeck';
 import { generateTarotReading } from '@/utils/aiTarotReader';
 import { tarotSounds } from '@/utils/sounds';
-import { Sparkles, Shuffle, Eye, Moon, Star, Volume2, VolumeX } from 'lucide-react';
+import { Sparkles, Shuffle, Eye, Moon, Star, Volume2, VolumeX, Github, ExternalLink, Share2 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import cosmicHero from '@/assets/cosmic-hero.jpg';
 
@@ -34,7 +34,7 @@ const Index = () => {
     setSelectedCount(0);
     setShowReading(false);
     setReading('');
-    
+
     // Play shuffle sound
     tarotSounds.playSound('shuffle');
   };
@@ -59,10 +59,10 @@ const Index = () => {
   const performReading = async (cards: TarotCardType[]) => {
     setIsLoading(true);
     setShowReading(true);
-    
+
     // Play card reveal sound
     tarotSounds.playSound('cardReveal');
-    
+
     try {
       const aiReading = await generateTarotReading(question, cards);
       setReading(aiReading);
@@ -81,10 +81,10 @@ const Index = () => {
 
     setIsLoading(true);
     setShowDeck(false);
-    
+
     // Play shuffle sound
     tarotSounds.playSound('shuffle');
-    
+
     const cards = drawCards(tarotDeck, 3);
     setSelectedCards(cards);
     setShowReading(true);
@@ -112,7 +112,7 @@ const Index = () => {
     setShowReading(false);
     setShowDeck(false);
     setSelectedCount(0);
-    
+
     // Play mystical chime for reset
     tarotSounds.playSound('mysticalChime');
   };
@@ -126,9 +126,9 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-cosmic relative overflow-hidden">
       {/* Cosmic Background */}
       <div className="absolute inset-0">
-        <img 
-          src={cosmicHero} 
-          alt="Cosmic background" 
+        <img
+          src={cosmicHero}
+          alt="Cosmic background"
           className="w-full h-full object-cover opacity-30"
         />
         <div className="absolute inset-0 bg-gradient-cosmic/80" />
@@ -157,6 +157,43 @@ const Index = () => {
         <div className="text-center mb-12 animate-fade-in-up relative">
           {/* Controls */}
           <div className="absolute top-0 right-4 flex gap-2">
+            <a
+              href="https://github.com/gitsofaryan/astrotarot"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors text-xs bg-accent/10 hover:bg-accent/20 px-2 py-1 rounded"
+              title="Give us a star on GitHub"
+            >
+              <Star className="w-3 h-3" />
+              <ExternalLink className="w-3 h-3" />
+            </a>
+            <button
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({
+                    title: 'AstroTarot - AI Powered Tarot Readings',
+                    text: 'Discover your cosmic destiny with AI-powered tarot readings!',
+                    url: window.location.href
+                  });
+                } else {
+                  navigator.clipboard.writeText(window.location.href);
+                  alert('Link copied to clipboard!');
+                }
+              }}
+              className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors text-xs bg-accent/10 hover:bg-accent/20 px-2 py-1 rounded"
+              title="Share with friends"
+            >
+              <Share2 className="w-3 h-3" />
+            </button>
+            <a
+              href="https://github.com/gitsofaryan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors text-sm px-2 py-1"
+            >
+              <Github className="w-4 h-4" />
+              <span className="hidden sm:inline">Arien Jain</span>
+            </a>
             <ThemeToggle />
             <Button
               onClick={toggleSound}
@@ -171,7 +208,7 @@ const Index = () => {
               )}
             </Button>
           </div>
-          
+
           <div className="flex items-center justify-center gap-3 mb-4">
             <Moon className="w-8 h-8 text-accent animate-cosmic-float" />
             <h1 className="text-5xl md:text-6xl font-bold bg-gradient-mystical bg-clip-text text-transparent">
@@ -180,7 +217,7 @@ const Index = () => {
             <Star className="w-8 h-8 text-accent animate-cosmic-float" style={{ animationDelay: '1s' }} />
           </div>
           <p className="text-xl text-foreground/80 max-w-2xl mx-auto leading-relaxed">
-            Unveil the mysteries of your destiny through the ancient wisdom of the Tarot. 
+            Unveil the mysteries of your destiny through the ancient wisdom of the Tarot.
             Ask your question and let the cosmic energies guide your path.
           </p>
         </div>
@@ -203,7 +240,7 @@ const Index = () => {
                   placeholder="What guidance do you seek from the cosmic energies?"
                   className="text-lg p-6 bg-background/60 border-2 border-accent/40 focus:border-accent text-center rounded-xl font-medium placeholder:text-muted-foreground/70"
                 />
-                
+
                 <div className="flex flex-col sm:flex-row gap-6">
                   <Button
                     onClick={handleQuickReading}
@@ -214,7 +251,7 @@ const Index = () => {
                     <Sparkles className="w-6 h-6 mr-3" />
                     Quick Reading
                   </Button>
-                  
+
                   <Button
                     onClick={handleShuffleDeck}
                     disabled={!question.trim()}

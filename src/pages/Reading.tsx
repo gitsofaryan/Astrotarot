@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,7 +7,8 @@ import { TarotReading } from '@/components/TarotReading';
 import { tarotDeck, drawCards, TarotCard as TarotCardType } from '@/data/tarotDeck';
 import { generateTarotReading } from '@/utils/aiTarotReader';
 import { tarotSounds } from '@/utils/sounds';
-import { Sparkles, Shuffle, Eye, Moon, Star, Volume2, VolumeX, ArrowLeft, Home } from 'lucide-react';
+import { trackEvent, trackPageView } from '@/utils/analytics';
+import { Sparkles, Shuffle, Eye, Moon, Star, Volume2, VolumeX, ArrowLeft, Home, Github, ExternalLink, Share2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import cosmicHero from '@/assets/cosmic-hero.jpg';
 
@@ -23,10 +24,18 @@ const Reading = () => {
   const [selectedCount, setSelectedCount] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
 
+  // Track page view on component mount
+  useEffect(() => {
+    trackPageView('reading');
+  }, []);
+
   const handleShuffleDeck = () => {
     if (!question.trim()) {
       return;
     }
+
+    // Track shuffle event
+    trackEvent.deckShuffled();
 
     const shuffled = [...tarotDeck].sort(() => Math.random() - 0.5);
     setShuffledDeck(shuffled);
@@ -35,7 +44,7 @@ const Reading = () => {
     setSelectedCount(0);
     setShowReading(false);
     setReading('');
-    
+
     // Play shuffle sound
     tarotSounds.playSound('shuffle');
   };
@@ -45,6 +54,9 @@ const Reading = () => {
       const newSelected = [...selectedCards, card];
       setSelectedCards(newSelected);
       setSelectedCount(newSelected.length);
+
+      // Track card selection
+      trackEvent.cardSelected(card.name, newSelected.length);
 
       // Play card select sound
       tarotSounds.playSound('cardSelect');
@@ -60,10 +72,10 @@ const Reading = () => {
   const performReading = async (cards: TarotCardType[]) => {
     setIsLoading(true);
     setShowReading(true);
-    
+
     // Play card reveal sound
     tarotSounds.playSound('cardReveal');
-    
+
     try {
       const aiReading = await generateTarotReading(question, cards);
       setReading(aiReading);
@@ -82,10 +94,10 @@ const Reading = () => {
 
     setIsLoading(true);
     setShowDeck(false);
-    
+
     // Play shuffle sound
     tarotSounds.playSound('shuffle');
-    
+
     const cards = drawCards(tarotDeck, 3);
     setSelectedCards(cards);
     setShowReading(true);
@@ -113,7 +125,7 @@ const Reading = () => {
     setShowReading(false);
     setShowDeck(false);
     setSelectedCount(0);
-    
+
     // Play mystical chime for reset
     tarotSounds.playSound('mysticalChime');
   };
@@ -121,15 +133,18 @@ const Reading = () => {
   const toggleSound = () => {
     const newState = tarotSounds.toggleSounds();
     setSoundEnabled(newState);
+
+    // Track sound toggle
+    trackEvent.soundToggled(newState);
   };
 
   return (
     <div className="min-h-screen bg-gradient-cosmic relative overflow-hidden">
       {/* Cosmic Background */}
       <div className="absolute inset-0">
-        <img 
-          src={cosmicHero} 
-          alt="Cosmic background" 
+        <img
+          src={cosmicHero}
+          alt="Cosmic background"
           className="w-full h-full object-cover opacity-30"
         />
         <div className="absolute inset-0 bg-gradient-cosmic/80" />
@@ -173,17 +188,60 @@ const Reading = () => {
             <Star className="w-8 h-8 text-accent animate-cosmic-float" style={{ animationDelay: '1s' }} />
           </div>
 
-          <Button
-            onClick={toggleSound}
-            variant="ghost"
-            className="text-accent hover:bg-accent/20 transition-all duration-300"
-          >
-            {soundEnabled ? (
-              <Volume2 className="w-5 h-5" />
-            ) : (
-              <VolumeX className="w-5 h-5" />
-            )}
-          </Button>
+          <div className="flex items-center gap-3">
+            <a
+              href="https://github.com/gitsofaryan/astrotarot"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors text-xs bg-accent/10 hover:bg-accent/20 px-2 py-1 rounded"
+              title="Give us a star on GitHub"
+              onClick={() => trackEvent.githubStarClicked()}
+            >
+              <Star className="w-3 h-3" />
+              <ExternalLink className="w-3 h-3" />
+            </a>
+            <button
+              onClick={() => {
+                const shareMethod = navigator.share ? 'web_share' : 'copy_link';
+                trackEvent.shareReading(shareMethod);
+
+                if (navigator.share) {
+                  navigator.share({
+                    title: 'AstroTarot - AI Powered Tarot Readings',
+                    text: 'Discover your cosmic destiny with AI-powered tarot readings!',
+                    url: window.location.href
+                  });
+                } else {
+                  navigator.clipboard.writeText(window.location.href);
+                  alert('Link copied to clipboard!');
+                }
+              }}
+              className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors text-xs bg-accent/10 hover:bg-accent/20 px-2 py-1 rounded"
+              title="Share with friends"
+            >
+              <Share2 className="w-3 h-3" />
+            </button>
+            <a
+              href="https://github.com/gitsofaryan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors text-sm"
+            >
+              <Github className="w-4 h-4" />
+              <span className="hidden sm:inline">Arien Jain</span>
+            </a>
+            <Button
+              onClick={toggleSound}
+              variant="ghost"
+              className="text-accent hover:bg-accent/20 transition-all duration-300"
+            >
+              {soundEnabled ? (
+                <Volume2 className="w-5 h-5" />
+              ) : (
+                <VolumeX className="w-5 h-5" />
+              )}
+            </Button>
+          </div>
         </div>
 
         {!showReading ? (
@@ -204,7 +262,7 @@ const Reading = () => {
                   placeholder="What guidance do you seek from the cosmic energies?"
                   className="text-lg p-6 bg-background/60 border-2 border-accent/40 focus:border-accent text-center rounded-xl font-medium placeholder:text-muted-foreground/70"
                 />
-                
+
                 <div className="flex flex-col sm:flex-row gap-6">
                   <Button
                     onClick={handleQuickReading}
@@ -215,7 +273,7 @@ const Reading = () => {
                     <Sparkles className="w-6 h-6 mr-3" />
                     Quick Reading
                   </Button>
-                  
+
                   <Button
                     onClick={handleShuffleDeck}
                     disabled={!question.trim()}
@@ -278,7 +336,7 @@ const Reading = () => {
                 <Sparkles className="w-6 h-6 mr-3" />
                 New Reading
               </Button>
-              
+
               <Button
                 onClick={() => navigate('/')}
                 variant="ghost"

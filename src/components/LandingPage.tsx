@@ -5,18 +5,21 @@ import { Badge } from '@/components/ui/badge';
 import { subscriptionPlans } from '@/data/subscriptionPlans';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthModal } from '@/components/AuthModal';
-import { 
-  Sparkles, 
-  Moon, 
-  Star, 
-  Check, 
-  Zap, 
-  Shield, 
-  Users, 
+import {
+  Sparkles,
+  Moon,
+  Star,
+  Check,
+  Zap,
+  Shield,
+  Users,
   TrendingUp,
   Eye,
   Heart,
-  Crown
+  Crown,
+  Github,
+  ExternalLink,
+  Share2
 } from 'lucide-react';
 import cosmicHero from '@/assets/cosmic-hero.jpg';
 
@@ -102,10 +105,49 @@ export const LandingPage = () => {
               AstroTarot
             </span>
           </div>
-          
+
           <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <a
+                href="https://github.com/gitsofaryan/astrotarot"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors text-xs bg-accent/10 hover:bg-accent/20 px-2 py-1 rounded"
+                title="Give us a star on GitHub"
+              >
+                <Star className="w-3 h-3" />
+                <ExternalLink className="w-3 h-3" />
+              </a>
+              <button
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'AstroTarot - AI Powered Tarot Readings',
+                      text: 'Discover your cosmic destiny with AI-powered tarot readings!',
+                      url: window.location.href
+                    });
+                  } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    alert('Link copied to clipboard!');
+                  }
+                }}
+                className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors text-xs bg-accent/10 hover:bg-accent/20 px-2 py-1 rounded"
+                title="Share with friends"
+              >
+                <Share2 className="w-3 h-3" />
+              </button>
+            </div>
+            <a
+              href="https://github.com/gitsofaryan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-accent hover:text-accent/80 transition-colors text-sm"
+            >
+              <Github className="w-4 h-4" />
+              <span className="hidden lg:inline">Arien Jain</span>
+            </a>
             {user ? (
-              <Button 
+              <Button
                 onClick={() => window.location.href = '/app'}
                 className="bg-gradient-mystical hover:shadow-lg hover:shadow-accent/30"
               >
@@ -116,7 +158,7 @@ export const LandingPage = () => {
                 <Button variant="ghost" onClick={handleSignIn}>
                   Sign In
                 </Button>
-                <Button 
+                <Button
                   onClick={handleGetStarted}
                   className="bg-gradient-mystical hover:shadow-lg hover:shadow-accent/30"
                 >
@@ -131,9 +173,9 @@ export const LandingPage = () => {
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0">
-          <img 
-            src={cosmicHero} 
-            alt="Cosmic background" 
+          <img
+            src={cosmicHero}
+            alt="Cosmic background"
             className="w-full h-full object-cover opacity-30"
           />
           <div className="absolute inset-0 bg-gradient-cosmic/80" />
@@ -163,21 +205,21 @@ export const LandingPage = () => {
               Unlock Your Destiny with AI Tarot
             </h1>
             <p className="text-xl md:text-2xl text-foreground/80 mb-8 leading-relaxed">
-              Experience the ancient wisdom of tarot cards enhanced by cutting-edge AI. 
+              Experience the ancient wisdom of tarot cards enhanced by cutting-edge AI.
               Get personalized readings that illuminate your path forward.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 onClick={handleGetStarted}
                 className="bg-gradient-mystical hover:shadow-2xl hover:shadow-accent/30 text-lg px-8 py-6 h-auto"
               >
                 <Sparkles className="w-6 h-6 mr-3" />
                 Start Your Journey
               </Button>
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 variant="outline"
                 className="border-2 border-accent/60 hover:bg-accent/20 text-lg px-8 py-6 h-auto"
               >
@@ -218,7 +260,7 @@ export const LandingPage = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <Card 
+              <Card
                 key={index}
                 className="bg-card/80 backdrop-blur-md border-2 border-accent/20 hover:border-accent/40 transition-all duration-500 hover:shadow-xl hover:shadow-accent/20"
               >
@@ -249,13 +291,12 @@ export const LandingPage = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
             {subscriptionPlans.map((plan, index) => (
-              <Card 
+              <Card
                 key={plan.id}
-                className={`relative bg-card/80 backdrop-blur-md border-2 transition-all duration-500 hover:shadow-2xl ${
-                  plan.popular 
-                    ? 'border-accent shadow-xl shadow-accent/20 scale-105' 
+                className={`relative bg-card/80 backdrop-blur-md border-2 transition-all duration-500 hover:shadow-2xl ${plan.popular
+                    ? 'border-accent shadow-xl shadow-accent/20 scale-105'
                     : 'border-accent/20 hover:border-accent/40'
-                }`}
+                  }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
@@ -265,7 +306,7 @@ export const LandingPage = () => {
                     </Badge>
                   </div>
                 )}
-                
+
                 <CardHeader className="text-center pb-4">
                   <CardTitle className="text-2xl text-accent mb-2">{plan.name}</CardTitle>
                   <div className="mb-4">
@@ -276,7 +317,7 @@ export const LandingPage = () => {
                     {plan.readingsLimit === -1 ? 'Unlimited' : plan.readingsLimit} readings per month
                   </p>
                 </CardHeader>
-                
+
                 <CardContent className="space-y-6">
                   <ul className="space-y-3">
                     {plan.features.map((feature, featureIndex) => (
@@ -286,13 +327,12 @@ export const LandingPage = () => {
                       </li>
                     ))}
                   </ul>
-                  
-                  <Button 
-                    className={`w-full ${
-                      plan.popular 
-                        ? 'bg-gradient-mystical hover:shadow-lg hover:shadow-accent/30' 
+
+                  <Button
+                    className={`w-full ${plan.popular
+                        ? 'bg-gradient-mystical hover:shadow-lg hover:shadow-accent/30'
                         : 'bg-secondary hover:bg-secondary/80'
-                    }`}
+                      }`}
                     onClick={handleGetStarted}
                   >
                     {plan.price === 0 ? 'Start Free' : 'Choose Plan'}
@@ -315,7 +355,7 @@ export const LandingPage = () => {
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {testimonials.map((testimonial, index) => (
-              <Card 
+              <Card
                 key={index}
                 className="bg-card/80 backdrop-blur-md border-2 border-accent/20 hover:border-accent/40 transition-all duration-500"
               >
@@ -344,7 +384,7 @@ export const LandingPage = () => {
             <p className="text-xl text-foreground/70 mb-8">
               Join thousands of seekers who have discovered their path through AstroTarot
             </p>
-            <Button 
+            <Button
               size="lg"
               onClick={handleGetStarted}
               className="bg-gradient-mystical hover:shadow-2xl hover:shadow-accent/30 text-lg px-12 py-6 h-auto"
@@ -371,7 +411,7 @@ export const LandingPage = () => {
                 Unlock the mysteries of your destiny through AI-powered tarot readings.
               </p>
             </div>
-            
+
             <div>
               <h4 className="font-semibold text-accent mb-4">Product</h4>
               <ul className="space-y-2 text-sm text-foreground/60">
@@ -380,7 +420,7 @@ export const LandingPage = () => {
                 <li><a href="#" className="hover:text-accent transition-colors">API</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-semibold text-accent mb-4">Support</h4>
               <ul className="space-y-2 text-sm text-foreground/60">
@@ -389,7 +429,7 @@ export const LandingPage = () => {
                 <li><a href="#" className="hover:text-accent transition-colors">Privacy</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-semibold text-accent mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-foreground/60">
@@ -399,14 +439,14 @@ export const LandingPage = () => {
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-accent/20 mt-8 pt-8 text-center text-sm text-foreground/60">
-            <p>&copy; 2024 AstroTarot. All rights reserved.</p>
+            <p>&copy; 2025 AstroTarot. All rights reserved.</p>
           </div>
         </div>
       </footer>
 
-      <AuthModal 
+      <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         mode={authMode}
