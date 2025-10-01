@@ -83,10 +83,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('astrotarot_user');
-  };
+      const logout = () => {
+      setLoading(true);
+      setUser(null);
+      localStorage.removeItem('astrotarot_user');
+      setLoading(false);
+    };
 
   const updateUser = (updates: Partial<User>) => {
     if (user) {
